@@ -14,8 +14,8 @@ export default function Layout(props) {
   return (
     <>
       <Head>
-        <link rel="preconnect" href="https://cdn.sanity.io/" />
-        <link rel="dns-prefetch" href="https://cdn.sanity.io//" />
+        {/* <link rel="preconnect" href="https://cdn.sanity.io/" />
+        <link rel="dns-prefetch" href="https://cdn.sanity.io//" /> */}
       </Head>
       <NextSeo
         title={props.title}
@@ -34,11 +34,6 @@ export default function Layout(props) {
             }
           ],
           site_name: props.title
-        }}
-        twitter={{
-          handle: "@surjithctly",
-          site: "@surjithctly",
-          cardType: "summary_large_image"
         }}
       />
 
