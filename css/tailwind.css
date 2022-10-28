@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*Custom Styles Here*/
+
+li::before {
+  content: "\00BB";
+  margin-right: 0.5rem;
+  color: #ff3183;
+}
