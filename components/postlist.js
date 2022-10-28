@@ -28,8 +28,6 @@ export default function PostList({ post, aspect }) {
     return `${months[newDate[1] - 1]} ${newDate[2]}, ${newDate[0]}`;
   }
 
-  console.log({ post });
-
   useEffect(() => {
     setData({
       postTitle: post?.title,

@@ -56,32 +56,6 @@ export default function Contact({ siteconfig }) {
         }
       });
     setTimeout(() => setIsSuccess(false), 5000);
-    // setLoading(true);
-    // // setHasSubmitted(true);
-    // if (blankckeck.trim().length !== 0) {
-    //   emailjs
-    //     .sendForm(
-    //       emailjsServiceId,
-    //       emailjsTemplateId,
-    //       form.current,
-    //       emailjsPublicKey
-    //     )
-    //     .then(
-    //       result => {
-    //         console.log({ result });
-    //         setIsSuccess(true);
-
-    //         setBlankcheck("");
-    //         reset();
-    //       },
-    //       error => {
-    //         setIsSuccess(false);
-    //         setBlankcheck("");
-    //       }
-    //     );
-    // } else {
-    //   setBlankcheck("");
-    // }
   };
 
   return (

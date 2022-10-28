@@ -6,8 +6,6 @@ import Navbar from "@components/navbar";
 
 import Footer from "@components/footer";
 
-console.log("layout");
-
 export default function Layout(props) {
   const { children } = props;
   const ogimage = GetImage(props?.openGraphImage)?.src ?? "";
@@ -18,7 +16,8 @@ export default function Layout(props) {
         <link rel="dns-prefetch" href="https://cdn.sanity.io//" /> */}
       </Head>
       <NextSeo
-        title={props.title}
+        // title={props.title}
+        title="Blogs | Pranav Goswami"
         description={props.description}
         canonical={props.url}
         openGraph={{
@@ -40,7 +39,6 @@ export default function Layout(props) {
       <div className="antialiased text-gray-800 dark:bg-black dark:text-gray-400">
         <Navbar {...props} />
         <div>{children}</div>
-        {console.log("layout")}
 
         <Footer {...props} />
       </div>
