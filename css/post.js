@@ -1,15 +1,25 @@
 import blockQuoteSvg from "../public/img/quote.svg";
 
+const pink = "#ff468f";
+const lightPink = "#ff5a9c";
+const darkPink = "#ff3183";
+const primaryWhite = "#ff3183";
+const darkWhite = "#ff3183";
+
 const postStyle = {
   pre: {
     background: "#232B2B"
   },
   a: {
-    color: "#ff3183",
+    color: pink,
     textDecoration: "none",
     "& h1, h2, h3, h4, h5, h6, p, strong": {
-      color: "#ff3183"
+      color: pink
     }
+  },
+  u: {
+    textDecoration: "none",
+    color: lightPink
   },
   img: {
     margin: "2rem auto"

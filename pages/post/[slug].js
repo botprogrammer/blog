@@ -34,7 +34,7 @@ export default function Post(props) {
               url
             }
             description {
-              markdown
+              html
             }
           }
           content {
@@ -68,7 +68,7 @@ export default function Post(props) {
         postContent: post.content.html,
         // postExcerpt: data?.post.data.attributes.excerpt,
         postAuthorName: post.author.name,
-        postAuthorShortDescription: post.author.description.markdown,
+        postAuthorShortDescription: post.author.description.html,
         currentPostId: parseInt(router.query.slug)
       });
     }
