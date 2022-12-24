@@ -5,12 +5,7 @@ import Link from "next/link";
 export default function About() {
   return (
     <Layout>
-      <NextSeo
-        title={`Peek-a-boo!`}
-        twitter={{
-          cardType: "summary_large_image"
-        }}
-      />
+      <NextSeo title={`Peek-a-boo!`} />
 
       <section className="text-gray-400 body-font">
         <div className="container mx-auto flex px-5 py-24 items-center justify-center flex-col">
