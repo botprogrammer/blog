@@ -6,7 +6,7 @@ const ThemeSwitch = () => {
 
   useEffect(() => {
     setTheme("dark");
-  }, []);
+  }, [theme]);
 
   return (
     <div className="inline-flex items-center">
