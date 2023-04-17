@@ -8,7 +8,6 @@ export default function AuthorCard({
   authorName,
   authorShortDescription
 }) {
-  // const imageProps = author?.image ? GetImage(author.image) : null;
   return (
     <Box sx={postStyle}>
       <div className="px-8 py-8 mt-3 text-gray-500 rounded-2xl bg-gray-50 dark:bg-gray-900 dark:text-gray-400">

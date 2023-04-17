@@ -8,8 +8,6 @@ import {
 
 const url = process.env.NEXT_PUBLIC_GRAPHCMS_URL;
 
-const token = process.env.NEXT_PUBLIC_STRAPI_TOKEN;
-
 const client = new ApolloClient({
   uri: url,
   cache: new InMemoryCache()

@@ -1,19 +1,13 @@
-import { useState, useEffect } from "react";
 import { NextSeo } from "next-seo";
 import Layout from "@components/layout";
 import Container from "@components/container";
 import { useRouter } from "next/router";
 import PostList from "@components/postlist";
-// import POSTS from "./queries/multiplePosts";
 
 import { useQuery, gql } from "@apollo/client";
 
-// const url = process.env.NEXT_PUBLIC_BASE_URL;
-
-// const token = process.env.NEXT_PUBLIC_STRAPI_TOKEN;
-
-export default function Home() {
-  const { loading, error, data } = useQuery(gql`
+export default function Home({ url }) {
+  const { data } = useQuery(gql`
     query {
       posts {
         readingTime
@@ -43,34 +37,17 @@ export default function Home() {
     }
   `);
 
-  const router = useRouter();
-
   return (
     <>
+      <NextSeo
+        title="Pranav Goswami Blogs"
+        description="Welcome to Pranav Goswami Blogs, where I love to share my passion for all things web development, including React JS, Next JS, Gatsby, Javascript, UI/UX, and more. This is the perfect place to find expert insights, helpful tips, and engaging tutorials on the latest trends and technologies in the field. Whether you're just starting out or looking to take your skills to the next level, I've got you covered. So come on in, have a look around, and join me in this journey of exploring the exciting world of web development!"
+        image=""
+        url=""
+        canonical={url}
+      />
       {data && (
         <Layout>
-          {/* <NextSeo
-            title={`${siteConfig?.title}`}
-            description={siteConfig?.description || ""}
-            canonical={siteConfig?.url}
-            openGraph={{
-              url: siteConfig?.url,
-              title: `${siteConfig?.title}`,
-              description: siteConfig?.description || "",
-              images: [
-                {
-                  url: ogimage,
-                  width: 800,
-                  height: 600,
-                  alt: ""
-                }
-              ],
-              site_name: "Stablo"
-            }}
-            twitter={{
-              cardType: "summary_large_image"
-            }}
-          /> */}
           <Container>
             <div className="grid gap-10 lg:gap-10 md:grid-cols-2 ">
               {data.posts.slice(0, 2).map(post => (
@@ -95,60 +72,6 @@ export default function Home() {
           </Container>
         </Layout>
       )}
-      {/* {posts} */}
-      {/* {posts && siteConfig && (
-        <Layout {...siteConfig}>
-          <NextSeo
-            title={`${siteConfig?.title}`}
-            description={siteConfig?.description || ""}
-            canonical={siteConfig?.url}
-            openGraph={{
-              url: siteConfig?.url,
-              title: `${siteConfig?.title}`,
-              description: siteConfig?.description || "",
-              images: [
-                {
-                  url: ogimage,
-                  width: 800,
-                  height: 600,
-                  alt: ""
-                }
-              ],
-              site_name: "Stablo"
-            }}
-            twitter={{
-              cardType: "summary_large_image"
-            }}
-          />
-          <Container>
-            <div className="grid gap-10 lg:gap-10 md:grid-cols-2 ">
-              {posts.slice(0, 2).map(post => (
-                <PostList
-                  key={post._id}
-                  post={post}
-                  aspect="landscape"
-                  preloadImage={true}
-                />
-              ))}
-            </div>
-            <div className="grid gap-10 mt-10 lg:gap-10 md:grid-cols-2 xl:grid-cols-3 ">
-              {posts.slice(2).map(post => (
-                
-              ))}
-            </div>
-          </Container>
-        </Layout>
-      )} */}
-      {/* <PostList key={post?._id} post={post} aspect="square" /> */}
     </>
   );
-}
-
-export async function getStaticProps({ params, preview = false }) {
-  return {
-    props: {
-      preview
-    },
-    revalidate: 10
-  };
 }
