@@ -43,7 +43,12 @@ export default function Contact({ siteconfig }) {
 
   return (
     <Layout {...siteconfig}>
-      <NextSeo title={`Contact | Pranav's Blog`} />
+      <NextSeo
+        title={`Contact | Pranav's Blog`}
+        canonical="https://pranavgoswamiblogs.vercel.app/contact"
+        description="Contact Pranav Goswami"
+        url="https://pranavgoswamiblogs.vercel.app/contact"
+      />
       <Container>
         <div className="grid my-10 md:grid-cols-2">
           <div className="my-10">

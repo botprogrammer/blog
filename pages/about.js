@@ -10,8 +10,8 @@ export default function About({ fullUrl }) {
       <NextSeo
         title="About Pranav Goswami"
         description="Pranav Goswami is a Fullstack developer who specializes in designing and developing exceptional digital experiences."
-        canonical={fullUrl}
-        url={fullUrl}
+        canonical="https://pranavgoswamiblogs.vercel.app/about"
+        url="https://pranavgoswamiblogs.vercel.app/about"
       />
 
       <section className="text-gray-400 body-font">

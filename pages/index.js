@@ -18,8 +18,6 @@ export default function Index({ fullUrl }) {
 // };
 
 export const getServerSideProps = async context => {
-  console.log({ context });
-
   return {
     props: {
       data: null
