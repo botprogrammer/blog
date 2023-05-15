@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Box } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import Layout from "@components/layout";
@@ -13,6 +13,8 @@ import { Markup } from "interweave";
 import { useQuery, gql } from "@apollo/client";
 
 import postStyle from "css/post";
+import Lottie from "react-lottie";
+import animationData from "../../lottie/loading.json";
 
 export default function Post() {
   const [postData, setPostData] = useState({});
@@ -61,6 +63,7 @@ export default function Post() {
       refetch().then(response => {
         if (response?.data?.post) {
           const post = response?.data.post;
+
           setPostData({
             postTitle: post.title,
             postReadingTime: post.readingTime,
@@ -68,7 +71,7 @@ export default function Post() {
             postImage: post.image.url,
             postAuthorImage: post.author.image.url,
             postContent: post.content.html,
-            postExcerpt: data?.post.excerpt.text,
+            postExcerpt: post.excerpt.text,
             postAuthorName: post.author.name,
             postAuthorShortDescription: post.author.description.html,
             currentPostId: parseInt(router.query.slug)
@@ -88,6 +91,15 @@ export default function Post() {
     setSlug(router.query.slug);
   }, [slug, router]);
 
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice"
+    }
+  };
+
   return (
     <>
       {Object.keys(postData).length ? (
@@ -95,9 +107,9 @@ export default function Post() {
           <NextSeo
             title={`${postData.postTitle} - Pranav Goswami Blogs`}
             description={postData.postExcerpt}
-            image=""
-            url=""
-            canonical={`${window.location.href}`}
+            image={postData.postImage}
+            url={window.location.href}
+            canonical={window.location.href}
           />
           <Box sx={postStyle}>
             <Container className="!pt-0">
@@ -182,7 +194,17 @@ export default function Post() {
             </Container>
           </Box>
         </Layout>
-      ) : null}
+      ) : (
+        <Grid
+          container
+          height="100vh"
+          alignItems="center"
+          justifyContent="center">
+          <Box height="25%">
+            <Lottie options={defaultOptions} />
+          </Box>
+        </Grid>
+      )}
     </>
   );
 }
