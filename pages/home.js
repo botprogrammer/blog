@@ -48,7 +48,7 @@ export default function Home({ url }) {
       {data && (
         <Layout>
           <Container>
-            <div className="grid gap-10 lg:gap-10 md:grid-cols-2 ">
+            <div className="grid gap-10 lg:gap-10 md:grid-cols-2">
               {data.posts.slice(0, 2).map(post => (
                 <PostList
                   key={post.slug}
