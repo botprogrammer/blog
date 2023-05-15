@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import { NextSeo } from "next-seo";
-import GetImage from "@utils/getImage";
 import Navbar from "@components/navbar";
 import Footer from "@components/footer";
 import { Snackbar, Box } from "@mui/material";
@@ -11,7 +10,6 @@ import hljs from "highlight.js";
 export default function Layout(props) {
   const [open, setOpen] = useState(false);
   const { children } = props;
-  const ogimage = GetImage(props?.openGraphImage)?.src ?? "";
 
   useEffect(() => {
     const allCodeTags = document.querySelectorAll("code");
@@ -36,24 +34,9 @@ export default function Layout(props) {
     <>
       <Head></Head>
       <NextSeo
-        // title={props.title}
-        title="Blogs | Pranav Goswami"
+        title="Pranav Goswami Blogs"
         description={props.description}
         canonical={props.url}
-        openGraph={{
-          url: props.url,
-          title: props.title,
-          description: props.description,
-          images: [
-            {
-              url: ogimage,
-              width: 800,
-              height: 600,
-              alt: props.title
-            }
-          ],
-          site_name: props.title
-        }}
       />
 
       <div className="antialiased text-gray-800 dark:bg-black dark:text-gray-400">

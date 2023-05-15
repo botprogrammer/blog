@@ -1,29 +1,26 @@
 import { useState, useEffect } from "react";
 import { Box } from "@mui/material";
-import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import Layout from "@components/layout";
 import Container from "@components/container";
 import { useRouter } from "next/router";
-
 import { NextSeo } from "next-seo";
 
 import AuthorCard from "@components/blog/authorCard";
-// import POST_DETAIL from "pages/queries/singlePost";
 import { Markup } from "interweave";
 
 import { useQuery, gql } from "@apollo/client";
 
 import postStyle from "css/post";
 
-export default function Post(props) {
-  const [postData, setPostData] = useState();
+export default function Post() {
+  const [postData, setPostData] = useState({});
   const [slug, setSlug] = useState();
 
   const router = useRouter();
 
-  const { loading, error, data } = useQuery(
+  const { data, refetch } = useQuery(
     gql`
       query {
         post(where: { slug: "${slug}" }) {
@@ -50,75 +47,58 @@ export default function Post(props) {
           tags {
             name
           }
+          excerpt {
+            text
+          }
         }
       }
-`
+`,
+    { skip: true }
   );
 
   useEffect(() => {
-    setSlug(router.query.slug);
-    if (data?.post) {
-      const post = data.post;
-      setPostData({
-        postTitle: post.title,
-        postReadingTime: post.readingTime,
-        postPublishedOn: post.publishedOn,
-        postImage: post.image.url,
-        postAuthorImage: post.author.image.url,
-        postContent: post.content.html,
-        // postExcerpt: data?.post.data.attributes.excerpt,
-        postAuthorName: post.author.name,
-        postAuthorShortDescription: post.author.description.html,
-        currentPostId: parseInt(router.query.slug)
+    if (slug) {
+      refetch().then(response => {
+        if (response?.data?.post) {
+          const post = response?.data.post;
+          setPostData({
+            postTitle: post.title,
+            postReadingTime: post.readingTime,
+            postPublishedOn: post.publishedOn,
+            postImage: post.image.url,
+            postAuthorImage: post.author.image.url,
+            postContent: post.content.html,
+            postExcerpt: data?.post.excerpt.text,
+            postAuthorName: post.author.name,
+            postAuthorShortDescription: post.author.description.html,
+            currentPostId: parseInt(router.query.slug)
+          });
+        }
       });
     }
-  }, [slug, router, data]);
+  }, [
+    refetch,
+    slug,
+    setPostData,
+    data?.post.excerpt.text,
+    router.query.slug
+  ]);
+
+  useEffect(() => {
+    setSlug(router.query.slug);
+  }, [slug, router]);
 
   return (
     <>
-      {postData && data && (
+      {Object.keys(postData).length ? (
         <Layout>
-          {/* <NextSeo
-            title={`${post.title} - ${siteConfig.title}`}
-            description={post.excerpt || ""}
-            canonical={`${siteConfig?.url}/post/${post.slug.current}`}
-            openGraph={{
-              url: `${siteConfig?.url}/post/${post.slug.current}`,
-              title: `${post.title} - ${siteConfig.title}`,
-              description: post.excerpt || "",
-              images: [
-                {
-                  url: GetImage(post?.mainImage).src || ogimage,
-                  width: 800,
-                  height: 600,
-                  alt: ""
-                }
-              ],
-              site_name: siteConfig.title
-            }}
-            twitter={{
-              cardType: "summary_large_image"
-            }}
-          /> */}
-          {/*
-          <div className="relative bg-white/20">
-            <div className="absolute w-full h-full -z-10">
-              {post?.mainImage && (
-                <Image
-                  {...GetImage(post.mainImage)}
-                  alt={post.mainImage?.alt || "Thumbnail"}
-                  layout="fill"
-                  objectFit="cover"
-                />
-              )}
-            </div>
-            <Container className="py-48">
-              <h1 className="relative max-w-3xl mx-auto mb-3 text-3xl font-semibold tracking-tight text-center lg:leading-snug text-brand-primary lg:text-4xl after:absolute after:w-full after:h-full after:bg-white after:inset-0 after:-z-10 after:blur-2xl after:scale-150">
-                {post.title}
-              </h1>
-            </Container>
-          </div> */}
-
+          <NextSeo
+            title={`${postData.postTitle} - Pranav Goswami Blogs`}
+            description={postData.postExcerpt}
+            image=""
+            url=""
+            canonical={`${window.location.href}`}
+          />
           <Box sx={postStyle}>
             <Container className="!pt-0">
               <div className="max-w-screen-md mx-auto test">
@@ -139,6 +119,7 @@ export default function Post(props) {
                           placeholder="blur"
                           layout="fill"
                           className="rounded-full"
+                          alt="Image"
                         />
                       )}
                     </div>
@@ -171,6 +152,7 @@ export default function Post(props) {
                   layout="fill"
                   loading="eager"
                   objectFit="cover"
+                  alt="Image"
                 />
               )}
             </div>
@@ -200,7 +182,7 @@ export default function Post(props) {
             </Container>
           </Box>
         </Layout>
-      )}
+      ) : null}
     </>
   );
 }

@@ -1,10 +1,7 @@
 import Container from "../components/container";
 import Layout from "../components/layout";
-// import { getClient } from "@lib/sanity";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-// import useWeb3Forms from "use-web3forms";
-// import { configQuery } from "@lib/groq";
 import React, { useRef } from "react";
 import emailjs from "@emailjs/browser";
 import { NextSeo } from "next-seo";
@@ -15,28 +12,14 @@ const emailjsPublicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
 
 export default function Contact({ siteconfig }) {
   const {
-    register,
-    handleSubmit,
-    reset,
-    watch,
-    control,
-    setValue,
-    formState: { errors, isSubmitSuccessful, isSubmitting }
+    formState: { errors }
   } = useForm({
     mode: "onTouched"
   });
 
   const form = useRef();
-
-  const [blankckeck, setBlankcheck] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
-  const [hasSubmitted, setHasSubmitted] = useState(false);
-  const [message, setMessage] = useState(false);
   const [loading, setLoading] = useState();
-
-  const handleChange = event => {
-    setBlankcheck(event.target.value);
-  };
 
   const sendEmail = e => {
     e.preventDefault();
@@ -60,7 +43,12 @@ export default function Contact({ siteconfig }) {
 
   return (
     <Layout {...siteconfig}>
-      <NextSeo title={`Contact | Pranav's Blog`} />
+      <NextSeo
+        title={`Contact | Pranav's Blog`}
+        canonical="https://pranavgoswamiblogs.vercel.app/contact"
+        description="Contact Pranav Goswami"
+        url="https://pranavgoswamiblogs.vercel.app/contact"
+      />
       <Container>
         <div className="grid my-10 md:grid-cols-2">
           <div className="my-10">
@@ -95,7 +83,6 @@ export default function Contact({ siteconfig }) {
               <div className="mb-5">
                 <input
                   required
-                  onChange={handleChange}
                   type="text"
                   name="from_name"
                   placeholder="Full Name"
@@ -114,7 +101,6 @@ export default function Contact({ siteconfig }) {
                 </label>
                 <input
                   required
-                  onChange={handleChange}
                   id="email_address"
                   type="email"
                   placeholder="Email Address"
@@ -136,7 +122,6 @@ export default function Contact({ siteconfig }) {
               <div className="mb-3">
                 <textarea
                   required
-                  onChange={handleChange}
                   name="message"
                   placeholder="Your Message"
                   className={`w-full px-4 py-3 border-2 placeholder:text-gray-800 dark:text-white dark:placeholder:text-gray-200 dark:bg-gray-900 rounded-md outline-none h-36 focus:ring-1  ${

@@ -1,24 +1,20 @@
-import { useEffect } from "react";
 import { useTheme } from "next-themes";
+import { SunIcon } from "@heroicons/react/outline";
 
 const ThemeSwitch = () => {
   const { theme, setTheme } = useTheme();
 
-  useEffect(() => {
-    setTheme("dark");
-  }, [theme]);
-
   return (
-    <div className="inline-flex items-center">
-      {/* <SunIcon className="w-4 h-4 mr-2" />
+    <div className="inline-flex items-center cursor-pointer">
+      <SunIcon className="w-4 h-4 mr-2" />
       <select
+        className="cursor-pointer"
         name="themeSwitch"
         value={theme}
         onChange={e => setTheme(e.target.value)}>
-        <option value="system">System</option>
         <option value="dark">Dark</option>
         <option value="light">Light</option>
-      </select> */}
+      </select>
     </div>
   );
 };

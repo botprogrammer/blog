@@ -2,10 +2,17 @@ import Layout from "../components/layout";
 import { NextSeo } from "next-seo";
 import Link from "next/link";
 
-export default function About() {
+export default function About({ fullUrl }) {
+  console.log({ fullUrl });
+
   return (
     <Layout>
-      <NextSeo title={`Peek-a-boo!`} />
+      <NextSeo
+        title="About Pranav Goswami"
+        description="Pranav Goswami is a Fullstack developer who specializes in designing and developing exceptional digital experiences."
+        canonical="https://pranavgoswamiblogs.vercel.app/about"
+        url="https://pranavgoswamiblogs.vercel.app/about"
+      />
 
       <section className="text-gray-400 body-font">
         <div className="container mx-auto flex px-5 py-24 items-center justify-center flex-col">
@@ -49,3 +56,13 @@ export default function About() {
     </Layout>
   );
 }
+
+About.getInitialProps = async ({ req }) => {
+  const protocol = req?.headers["x-forwarded-proto"] || "http";
+  const host = req?.headers["host"];
+  const fullUrl = `${protocol}://${host}${req?.url}`;
+
+  return {
+    fullUrl
+  };
+};

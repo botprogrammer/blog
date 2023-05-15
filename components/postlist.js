@@ -59,6 +59,7 @@ export default function PostList({ post, aspect }) {
                   layout="fill"
                   objectFit="cover"
                   className="transition-all"
+                  alt="Image"
                 />
               ) : (
                 <span className="absolute w-16 h-16 text-gray-200 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
@@ -112,6 +113,7 @@ export default function PostList({ post, aspect }) {
                   placeholder="blur"
                   sizes="30px"
                   className="rounded-full"
+                  alt="Image"
                 />
               )}
             </div>
