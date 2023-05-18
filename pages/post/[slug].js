@@ -15,6 +15,7 @@ import { useQuery, gql } from "@apollo/client";
 import postStyle from "css/post";
 import Lottie from "react-lottie";
 import animationData from "../../lottie/loading.json";
+import notFound from "../../lottie/notFound.json";
 
 export default function Post() {
   const [postData, setPostData] = useState({});
@@ -79,16 +80,27 @@ export default function Post() {
   const defaultOptions = {
     loop: true,
     autoplay: true,
-    animationData: animationData,
     rendererSettings: {
       preserveAspectRatio: "xMidYMid slice"
     }
   };
 
   return (
-    <>
-      {Object.keys(postData).length ? (
-        <Layout>
+    <Layout>
+      {data?.post === null ? (
+        <Grid
+          container
+          height="50vh"
+          alignItems="center"
+          justifyContent="center">
+          <Box height="100%">
+            <Lottie
+              options={{ ...defaultOptions, animationData: notFound }}
+            />
+          </Box>
+        </Grid>
+      ) : data ? (
+        <>
           <NextSeo
             title={`${postData.postTitle} - Pranav Goswami Blogs`}
             description={postData.postExcerpt}
@@ -178,7 +190,7 @@ export default function Post() {
               </article>
             </Container>
           </Box>
-        </Layout>
+        </>
       ) : (
         <Grid
           container
@@ -186,10 +198,15 @@ export default function Post() {
           alignItems="center"
           justifyContent="center">
           <Box height="25%">
-            <Lottie options={defaultOptions} />
+            <Lottie
+              options={{
+                ...defaultOptions,
+                animationData: animationData
+              }}
+            />
           </Box>
         </Grid>
       )}
-    </>
+    </Layout>
   );
 }
