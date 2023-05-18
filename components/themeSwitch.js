@@ -1,8 +1,15 @@
 import { useTheme } from "next-themes";
 import { SunIcon } from "@heroicons/react/outline";
+import { useEffect } from "react";
 
 const ThemeSwitch = () => {
   const { theme, setTheme } = useTheme();
+
+  useEffect(() => {
+    if (theme === "system") {
+      setTheme("dark");
+    }
+  }, [setTheme, theme]);
 
   return (
     <div className="inline-flex items-center cursor-pointer">
