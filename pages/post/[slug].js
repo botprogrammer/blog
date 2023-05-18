@@ -18,11 +18,12 @@ import animationData from "../../lottie/loading.json";
 
 export default function Post() {
   const [postData, setPostData] = useState({});
-  const [slug, setSlug] = useState();
 
   const router = useRouter();
 
-  const { data, refetch } = useQuery(
+  const { slug } = router.query;
+
+  const { data } = useQuery(
     gql`
       query {
         post(where: { slug: "${slug}" }) {
@@ -54,42 +55,26 @@ export default function Post() {
           }
         }
       }
-`,
-    { skip: true }
+`
   );
 
   useEffect(() => {
-    if (slug) {
-      refetch().then(response => {
-        if (response?.data?.post) {
-          const post = response?.data.post;
-
-          setPostData({
-            postTitle: post.title,
-            postReadingTime: post.readingTime,
-            postPublishedOn: post.publishedOn,
-            postImage: post.image.url,
-            postAuthorImage: post.author.image.url,
-            postContent: post.content.html,
-            postExcerpt: post.excerpt.text,
-            postAuthorName: post.author.name,
-            postAuthorShortDescription: post.author.description.html,
-            currentPostId: parseInt(router.query.slug)
-          });
-        }
+    if (data?.post) {
+      const { post } = data;
+      setPostData({
+        postTitle: post.title,
+        postReadingTime: post.readingTime,
+        postPublishedOn: post.publishedOn,
+        postImage: post.image.url,
+        postAuthorImage: post.author.image.url,
+        postContent: post.content.html,
+        postExcerpt: post.excerpt.text,
+        postAuthorName: post.author.name,
+        postAuthorShortDescription: post.author.description.html,
+        currentPostId: parseInt(router.query.slug)
       });
     }
-  }, [
-    refetch,
-    slug,
-    setPostData,
-    data?.post.excerpt.text,
-    router.query.slug
-  ]);
-
-  useEffect(() => {
-    setSlug(router.query.slug);
-  }, [slug, router]);
+  }, [data, router.query.slug]);
 
   const defaultOptions = {
     loop: true,
