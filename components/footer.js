@@ -3,7 +3,7 @@ import ThemeSwitch from "@components/themeSwitch";
 
 export default function Footer() {
   return (
-    <Container className="mt-10 border-t border-gray-100 dark:border-gray-800 flex align-center justify-between w-100">
+    <Container className="border-t border-gray-100 dark:border-gray-800 flex align-center justify-between w-100">
       <div className="text-sm text-center">
         Designed and Created by&nbsp;
         <a

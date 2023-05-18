@@ -5,6 +5,7 @@ import PostList from "@components/postlist";
 import { Box, Grid } from "@mui/material";
 import Lottie from "react-lottie";
 import animationData from "../../lottie/loading.json";
+import notFound from "../../lottie/notFound.json";
 
 import { useQuery, gql } from "@apollo/client";
 import { useRouter } from "next/router";
@@ -46,15 +47,26 @@ export default function TagDetail() {
   const defaultOptions = {
     loop: true,
     autoplay: true,
-    animationData: animationData,
     rendererSettings: {
       preserveAspectRatio: "xMidYMid slice"
     }
   };
 
   return (
-    <>
-      {data?.posts?.length > 0 ? (
+    <Layout>
+      {data?.posts?.length === 0 ? (
+        <Grid
+          container
+          height="50vh"
+          alignItems="center"
+          justifyContent="center">
+          <Box height="100%">
+            <Lottie
+              options={{ ...defaultOptions, animationData: notFound }}
+            />
+          </Box>
+        </Grid>
+      ) : data ? (
         <>
           <NextSeo
             title="Pranav Goswami Blogs"
@@ -63,42 +75,46 @@ export default function TagDetail() {
             url={window.location.href}
             canonical={window.location.href}
           />
-          <Layout>
-            <Container>
-              <div className="grid gap-10 lg:gap-10 md:grid-cols-2">
-                {data.posts.slice(0, 2).map(post => (
-                  <PostList
-                    key={post.slug}
-                    post={post}
-                    aspect="landscape"
-                    preloadImage={true}
-                  />
-                ))}
-              </div>
-              <div className="grid gap-10 mt-10 lg:gap-10 md:grid-cols-2 xl:grid-cols-3 ">
-                {data.posts.slice(2).map(post => (
-                  <PostList
-                    key={post.slug}
-                    post={post}
-                    aspect="landscape"
-                    preloadImage={true}
-                  />
-                ))}
-              </div>
-            </Container>
-          </Layout>
+
+          <Container>
+            <div className="grid gap-10 lg:gap-10 md:grid-cols-2">
+              {data.posts.slice(0, 2).map(post => (
+                <PostList
+                  key={post.slug}
+                  post={post}
+                  aspect="landscape"
+                  preloadImage={true}
+                />
+              ))}
+            </div>
+            <div className="grid gap-10 mt-10 lg:gap-10 md:grid-cols-2 xl:grid-cols-3 ">
+              {data.posts.slice(2).map(post => (
+                <PostList
+                  key={post.slug}
+                  post={post}
+                  aspect="landscape"
+                  preloadImage={true}
+                />
+              ))}
+            </div>
+          </Container>
         </>
       ) : (
         <Grid
           container
-          height="100vh"
+          height="50vh"
           alignItems="center"
           justifyContent="center">
-          <Box height="25%">
-            <Lottie options={defaultOptions} />
+          <Box height="50%">
+            <Lottie
+              options={{
+                ...defaultOptions,
+                animationData: animationData
+              }}
+            />
           </Box>
         </Grid>
       )}
-    </>
+    </Layout>
   );
 }

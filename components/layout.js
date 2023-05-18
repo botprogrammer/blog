@@ -39,9 +39,9 @@ export default function Layout(props) {
         canonical={props.url}
       />
 
-      <div className="antialiased text-gray-800 dark:bg-black dark:text-gray-400">
+      <div className="antialiased text-gray-800 dark:bg-black dark:text-gray-400 flex flex-col justify-between min-h-screen">
         <Navbar {...props} />
-        <div>
+        <div style={{ flex: "none" }}>
           {children}
           {open && (
             <Box sx={{ display: "flex", position: "relative" }}>
