@@ -49,40 +49,37 @@ export default function PostList({ post, aspect }) {
             aspect === "landscape" ? "aspect-video" : "aspect-square"
           )}>
           <Link href={`/post/${data?.postSlug}`}>
-            <a>
-              {data ? (
-                <Image
-                  src={data.postImage}
-                  blurDataURL={data.postImage}
-                  placeholder="blur"
-                  sizes="80vw"
-                  layout="fill"
-                  objectFit="cover"
-                  className="transition-all"
-                  alt="Image"
-                />
-              ) : (
-                <span className="absolute w-16 h-16 text-gray-200 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-                  <PhotographIcon />
-                </span>
-              )}
-            </a>
+            {data ? (
+              <Image
+                src={data.postImage}
+                blurDataURL={data.postImage}
+                placeholder="blur"
+                sizes="80vw"
+                layout="fill"
+                objectFit="cover"
+                className="transition-all"
+                alt="Image"
+              />
+            ) : (
+              <span className="absolute w-16 h-16 text-gray-200 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+                <PhotographIcon />
+              </span>
+            )}
           </Link>
         </div>
-        <CategoryLabel categories={post.categories} />
+
+        <CategoryLabel categories={post.tags} />
         <h2 className="mt-2 text-lg font-semibold tracking-normal text-brand-primary dark:text-white">
           <Link href={`/post/${data?.postSlug}`}>
-            <>
-              <div>
-                {data?.postTitle}{" "}
-                <span className="text-xs text-gray-300 dark:text-gray-600 mx-2">
-                  &bull;
-                </span>
-                <span className="text-sm font-light text-gray-400">
-                  {data?.postReadingTime} min read
-                </span>
-              </div>
-            </>
+            <div>
+              {data?.postTitle}{" "}
+              <span className="text-xs text-gray-300 dark:text-gray-600 mx-2">
+                &bull;
+              </span>
+              <span className="text-sm font-light text-gray-400">
+                {data?.postReadingTime} min read
+              </span>
+            </div>
           </Link>
         </h2>
 
