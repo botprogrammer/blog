@@ -17,6 +17,12 @@ const postStyle = {
       color: pink
     }
   },
+  span: {
+    fontSize: "1rem"
+  },
+  code: {
+    fontSize: "1rem"
+  },
   u: {
     textDecoration: "none",
     color: lightPink

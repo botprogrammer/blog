@@ -28,7 +28,7 @@ export default function Layout(props) {
       };
       hljs.highlightAll();
     });
-  }, []);
+  }, [props?.dataProps]);
 
   return (
     <>

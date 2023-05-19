@@ -86,7 +86,7 @@ export default function Post() {
   };
 
   return (
-    <Layout>
+    <Layout dataProps={postData}>
       {data?.post === null ? (
         <Grid
           container
@@ -168,7 +168,9 @@ export default function Post() {
 
             <Container>
               <article className="max-w-screen-md mx-auto ">
-                <div className="mx-auto my-3 prose prose-base dark:prose-invert prose-a:text-blue-500">
+                <div
+                  className="mx-auto my-3 prose prose-base dark:prose-invert prose-a:text-blue-500"
+                  style={{ maxWidth: "unset" }}>
                   <Markup content={postData.postContent} />
                 </div>
                 <div className="flex justify-center mt-7 mb-7">
