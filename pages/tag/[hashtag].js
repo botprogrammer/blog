@@ -16,7 +16,7 @@ export default function TagDetail() {
 
   const { data } = useQuery(gql`
     query {
-      posts(where: {tags_every: {name: "${hashtag}"}}) {
+      posts(where: {tags_every: {name: "${hashtag}"}}, orderBy: publishedOn_DESC) {
         readingTime
         slug
         title

@@ -11,7 +11,7 @@ import { useQuery, gql } from "@apollo/client";
 export default function Home() {
   const { data } = useQuery(gql`
     query {
-      posts {
+      posts(orderBy: publishedOn_DESC) {
         readingTime
         slug
         title
