@@ -4,60 +4,21 @@ import Image from "next/image";
 import Link from "next/link";
 import Layout from "@components/layout";
 import Container from "@components/container";
-import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
 
 import AuthorCard from "@components/blog/authorCard";
 import { Markup } from "interweave";
 
-import { useQuery, gql } from "@apollo/client";
+import { gql } from "@apollo/client";
 
 import postStyle from "css/post";
 import Lottie from "react-lottie";
 import animationData from "../../lottie/loading.json";
 import notFound from "../../lottie/notFound.json";
+import { client } from "pages/_app";
 
-export default function Post() {
+export default function Post({ data, loading }) {
   const [postData, setPostData] = useState({});
-
-  const router = useRouter();
-
-  const { slug } = router.query;
-
-  const { data } = useQuery(
-    gql`
-      query {
-        post(where: { slug: "${slug}" }) {
-          author {
-            name
-            slug
-            image {
-              url
-            }
-            description {
-              html
-            }
-          }
-          content {
-            html
-          }
-          image {
-            url
-          }
-          slug
-          title
-          readingTime
-          publishedOn
-          tags {
-            name
-          }
-          excerpt {
-            text
-          }
-        }
-      }
-`
-  );
 
   useEffect(() => {
     if (data?.post) {
@@ -71,11 +32,10 @@ export default function Post() {
         postContent: post.content.html,
         postExcerpt: post.excerpt.text,
         postAuthorName: post.author.name,
-        postAuthorShortDescription: post.author.description.html,
-        currentPostId: parseInt(router.query.slug)
+        postAuthorShortDescription: post.author.description.html
       });
     }
-  }, [data, router.query.slug]);
+  }, [data]);
 
   const defaultOptions = {
     loop: true,
@@ -102,11 +62,11 @@ export default function Post() {
       ) : data ? (
         <>
           <NextSeo
-            title={`${postData.postTitle} - Pranav Goswami Blogs`}
+            title={`${
+              postData.postTitle ? `${postData.postTitle} - ` : ""
+            }Pranav Goswami Blogs`}
             description={postData.postExcerpt}
             image={postData.postImage}
-            url={window.location.href}
-            canonical={window.location.href}
           />
           <Box sx={postStyle}>
             <Container className="!pt-0">
@@ -211,4 +171,127 @@ export default function Post() {
       )}
     </Layout>
   );
+}
+
+export async function getServerSideProps(context) {
+  const { slug } = context.query;
+
+  const getCachedData = async () => {
+    const cachedData = client.cache.readQuery({
+      query: gql`
+      query {
+        post(where: { slug: "${slug}" }) {
+          author {
+            name
+            slug
+            image {
+              url
+            }
+            description {
+              html
+            }
+          }
+          content {
+            html
+          }
+          image {
+            url
+          }
+          slug
+          title
+          readingTime
+          publishedOn
+          tags {
+            name
+          }
+          excerpt {
+            text
+          }
+        }
+      }
+  `
+    });
+    if (cachedData) {
+      return cachedData;
+    } else {
+      const data = await client
+        .query({
+          query: gql`
+              query {
+                post(where: { slug: "${slug}" }) {
+                  author {
+                    name
+                    slug
+                    image {
+                      url
+                    }
+                    description {
+                      html
+                    }
+                  }
+                  content {
+                    html
+                  }
+                  image {
+                    url
+                  }
+                  slug
+                  title
+                  readingTime
+                  publishedOn
+                  tags {
+                    name
+                  }
+                  excerpt {
+                    text
+                  }
+                }
+              }
+        `
+        })
+        .then(({ data }) => {
+          client.cache.writeQuery({
+            query: gql`
+          query {
+            post(where: { slug: "${slug}" }) {
+              author {
+                name
+                slug
+                image {
+                  url
+                }
+                description {
+                  html
+                }
+              }
+              content {
+                html
+              }
+              image {
+                url
+              }
+              slug
+              title
+              readingTime
+              publishedOn
+              tags {
+                name
+              }
+              excerpt {
+                text
+              }
+            }
+          }
+    `,
+            data
+          });
+          return data;
+        });
+      return data;
+    }
+  };
+
+  return {
+    props: { data: await getCachedData() }
+  };
 }
