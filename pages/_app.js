@@ -8,7 +8,7 @@ import {
 
 const url = process.env.NEXT_PUBLIC_GRAPHCMS_URL;
 
-const client = new ApolloClient({
+export const client = new ApolloClient({
   uri: url,
   cache: new InMemoryCache()
 });
