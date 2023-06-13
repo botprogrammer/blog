@@ -1,4 +1,4 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql } from "@apollo/client";
 import { client } from "./_app";
 
 export default function Sitemap() {
@@ -18,6 +18,12 @@ export const getServerSideProps = async ctx => {
     props: {}
   };
 };
+
+function formattedDate(d) {
+  return [d.getFullYear(), d.getMonth() + 1, d.getDate()]
+    .map(n => (n < 10 ? `0${n}` : `${n}`))
+    .join("-");
+}
 
 async function generateSitemap() {
   const { data } = await client.query({
@@ -39,7 +45,7 @@ ${posts
   .map(({ slug, createdAt }) => {
     return `<url>
     <loc>https://pranavgoswamiblogs.vercel.app/post/${slug}</loc>
-    <lastmod>${createdAt}</lastmod>
+    <lastmod>${formattedDate(new Date(createdAt))}</lastmod>
     </url>`;
   })
   .join("")}
