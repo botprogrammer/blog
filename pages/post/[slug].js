@@ -22,9 +22,11 @@ export default function Post({ data: { post }, currentUrl }) {
   const [postData, setPostData] = useState(post);
 
   const seoData = {
-    title: post.title,
-    description: post.excerpt.text,
-    image: post.image.url,
+    title: post?.title || "Pranav Goswami Blogs",
+    description:
+      post?.excerpt?.text ||
+      "Welcome to Pranav Goswami Blogs, where I love to share my passion for all things web development, including React JS, Next JS, Gatsby, Javascript, UI/UX, and more. This is the perfect place to find expert insights, helpful tips, and engaging tutorials on the latest trends and technologies in the field. Whether you're just starting out or looking to take your skills to the next level, I've got you covered. So come on in, have a look around, and join me in this journey of exploring the exciting world of web development!",
+    image: post?.image?.url || "",
     url: currentUrl
   };
 
