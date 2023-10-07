@@ -184,11 +184,16 @@ export default function Post({ data: { post }, currentUrl }) {
   );
 }
 
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({ req, res }) {
   const url = getUrl({ req });
   const slug = url.pathname.split("/").pop().split(".")[0];
 
   const currentUrl = url.origin + "/post/" + slug;
+
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=30, stale-while-revalidate=59"
+  );
 
   const dataQuery = gql`
   query {
