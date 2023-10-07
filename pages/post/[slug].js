@@ -161,7 +161,7 @@ export default function Post({ data: { post }, currentUrl }) {
                   authorName={postData.postAuthorName}
                   authorImage={postData.postAuthorImage}
                   authorShortDescription={
-                    post.postAuthorShortDescription
+                    postData.postAuthorShortDescription
                   }
                 />
               </article>
