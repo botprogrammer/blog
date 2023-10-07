@@ -3,12 +3,19 @@ import Head from "next/head";
 import { NextSeo } from "next-seo";
 import Navbar from "@components/navbar";
 import Footer from "@components/footer";
-import { Snackbar, Box } from "@mui/material";
+import { Snackbar, Box, Grid } from "@mui/material";
+
+import animationData from "../lottie/loading.json";
+
+import Router from "next/router";
 
 import hljs from "highlight.js";
+import Lottie from "react-lottie";
 
 export default function Layout(props) {
   const [open, setOpen] = useState(false);
+  const [isPageLoading, setIsPageLoading] = useState(false);
+
   const { children } = props;
 
   useEffect(() => {
@@ -30,6 +37,33 @@ export default function Layout(props) {
     });
   }, [props?.dataProps]);
 
+  useEffect(() => {
+    const startLoading = () => {
+      setIsPageLoading(true);
+    };
+    const endLoading = () => {
+      setIsPageLoading(false);
+    };
+
+    Router.events.on("routeChangeStart", startLoading);
+    Router.events.on("routeChangeComplete", endLoading);
+    Router.events.on("routeChangeError", endLoading);
+
+    return () => {
+      Router.events.off("routeChangeStart", startLoading);
+      Router.events.off("routeChangeComplete", endLoading);
+      Router.events.off("routeChangeError", endLoading);
+    };
+  }, []);
+
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice"
+    }
+  };
+
   return (
     <>
       <Head></Head>
@@ -42,7 +76,24 @@ export default function Layout(props) {
       <div className="antialiased text-gray-800 dark:bg-black dark:text-gray-400 flex flex-col justify-between min-h-screen">
         <Navbar {...props} />
         <div style={{ flex: "none" }}>
-          {children}
+          {isPageLoading ? (
+            <Grid
+              container
+              height="100vh"
+              alignItems="center"
+              justifyContent="center">
+              <Box height="25%">
+                <Lottie
+                  options={{
+                    ...defaultOptions,
+                    animationData: animationData
+                  }}
+                />
+              </Box>
+            </Grid>
+          ) : (
+            children
+          )}
           {open && (
             <Box sx={{ display: "flex", position: "relative" }}>
               <svg

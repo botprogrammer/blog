@@ -14,7 +14,6 @@ import { gql } from "@apollo/client";
 
 import postStyle from "css/post";
 import Lottie from "react-lottie";
-import animationData from "../../lottie/loading.json";
 import notFound from "../../lottie/notFound.json";
 import { client } from "pages/_app";
 import { getUrl } from "nextjs-current-url/server";
@@ -168,22 +167,7 @@ export default function Post({ data: { post }, currentUrl }) {
             </Container>
           </Box>
         </>
-      ) : (
-        <Grid
-          container
-          height="100vh"
-          alignItems="center"
-          justifyContent="center">
-          <Box height="25%">
-            <Lottie
-              options={{
-                ...defaultOptions,
-                animationData: animationData
-              }}
-            />
-          </Box>
-        </Grid>
-      )}
+      ) : null}
     </Layout>
   );
 }
