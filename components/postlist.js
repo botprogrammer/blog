@@ -74,8 +74,8 @@ export default function PostList({ post, aspect }) {
 
         <CategoryLabel categories={post.tags} />
 
-        <h2 className="mt-2 text-lg font-semibold tracking-normal text-brand-primary dark:text-white">
-          <div>
+        <div>
+          <h2 className="mt-2 text-lg font-bold tracking-normal text-brand-primary dark:text-white">
             <Link href={`/post/${data?.postSlug}`}>
               <a>{data?.postTitle}</a>
             </Link>
@@ -85,21 +85,21 @@ export default function PostList({ post, aspect }) {
             <span className="text-sm font-light text-gray-400">
               {data?.postReadingTime} min read
             </span>
-          </div>
-        </h2>
+          </h2>
+        </div>
 
         <div className="hidden">
           {data && (
-            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400 line-clamp-3">
-              <Link href={`/post/${data?.postSlug}`}>
-                <>
-                  {data?.postTitle}{" "}
-                  <div className="text-sm">
+            <Link href={`/post/${data?.postSlug}`}>
+              <>
+                {data?.postTitle}{" "}
+                <div className="text-sm">
+                  <p className="mt-2 text-sm text-gray-500 dark:text-gray-400 line-clamp-3">
                     {data?.postReadingTime} mins
-                  </div>
-                </>
-              </Link>
-            </p>
+                  </p>
+                </div>
+              </>
+            </Link>
           )}
         </div>
 

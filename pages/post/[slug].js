@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Box, Grid } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,26 +16,29 @@ import Lottie from "react-lottie";
 import animationData from "../../lottie/loading.json";
 import notFound from "../../lottie/notFound.json";
 import { client } from "pages/_app";
+import { getUrl } from "nextjs-current-url/server";
 
-export default function Post({ data: { post } }) {
-  let postData;
+export default function Post({ data: { post }, currentUrl }) {
+  const [postData, setPostData] = useState({});
 
-  if (post) {
-    postData = {
-      postTitle: post.title,
-      postReadingTime: post.readingTime,
-      postPublishedOn: post.publishedOn,
-      postImage: post.image.url,
-      postAuthorImage: post.author.image.url,
-      postContent: post.content.html,
-      postExcerpt: post.excerpt.text,
-      postAuthorName: post.author.name,
-      postAuthorShortDescription: post.author.description.html,
-      currentUrl:
-        "https://pranavgoswamiblogs.vercel.app/posts/" +
-        post.content.slug
-    };
-  }
+  useEffect(() => {
+    if (post) {
+      setPostData({
+        postTitle: post.title,
+        postReadingTime: post.readingTime,
+        postPublishedOn: post.publishedOn,
+        postImage: post.image.url,
+        postAuthorImage: post.author.image.url,
+        postContent: post.content.html,
+        postExcerpt: post.excerpt.text,
+        postAuthorName: post.author.name,
+        postAuthorShortDescription: post.author.description.html,
+        currentUrl
+      });
+    } else {
+      setPostData(null);
+    }
+  }, []);
 
   const defaultOptions = {
     loop: true,
@@ -67,7 +71,9 @@ export default function Post({ data: { post } }) {
                 : "Pranav Goswami Blog"
             }
             description={postData.postExcerpt}
-            image={postData.postImage}
+            openGraph={{
+              images: [{ url: postData.postImage }]
+            }}
             url={postData.currentUrl}
             canonical={postData.currentUrl}
           />
@@ -176,7 +182,10 @@ export default function Post({ data: { post } }) {
 }
 
 export async function getServerSideProps({ req }) {
-  const slug = req.url.split("/")[2];
+  const url = getUrl({ req });
+  const slug = url.pathname.split("/").pop().split(".")[0];
+
+  const currentUrl = url.origin + "/post/" + slug;
 
   const dataQuery = gql`
   query {
@@ -215,5 +224,5 @@ export async function getServerSideProps({ req }) {
     query: dataQuery
   });
 
-  return { props: { data } };
+  return { props: { data, currentUrl } };
 }
