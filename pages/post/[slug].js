@@ -19,7 +19,7 @@ import { client } from "pages/_app";
 import { getUrl } from "nextjs-current-url/server";
 
 export default function Post({ data: { post }, currentUrl }) {
-  const [postData, setPostData] = useState({});
+  const [postData, setPostData] = useState(post);
 
   useEffect(() => {
     if (post) {
