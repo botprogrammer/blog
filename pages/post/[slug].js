@@ -21,6 +21,13 @@ import { getUrl } from "nextjs-current-url/server";
 export default function Post({ data: { post }, currentUrl }) {
   const [postData, setPostData] = useState(post);
 
+  const seoData = {
+    title: post.title,
+    description: post.excerpt.text,
+    image: post.image.url,
+    url: currentUrl
+  };
+
   useEffect(() => {
     if (post) {
       setPostData({
@@ -30,10 +37,8 @@ export default function Post({ data: { post }, currentUrl }) {
         postImage: post.image.url,
         postAuthorImage: post.author.image.url,
         postContent: post.content.html,
-        postExcerpt: post.excerpt.text,
         postAuthorName: post.author.name,
-        postAuthorShortDescription: post.author.description.html,
-        currentUrl
+        postAuthorShortDescription: post.author.description.html
       });
     } else {
       setPostData(null);
@@ -65,17 +70,13 @@ export default function Post({ data: { post }, currentUrl }) {
       ) : post ? (
         <>
           <NextSeo
-            title={
-              postData.postTitle
-                ? postData.postTitle + " - Pranav Goswami Blog"
-                : "Pranav Goswami Blog"
-            }
-            description={postData.postExcerpt}
+            title={seoData.title}
+            description={seoData.description}
             openGraph={{
-              images: [{ url: postData.postImage }]
+              images: [{ url: seoData.image }]
             }}
-            url={postData.currentUrl}
-            canonical={postData.currentUrl}
+            url={seoData.url}
+            canonical={seoData.url}
           />
           <Box sx={postStyle}>
             <Container className="!pt-0">
