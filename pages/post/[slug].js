@@ -5,6 +5,7 @@ import Link from "next/link";
 import Layout from "@components/layout";
 import Container from "@components/container";
 import { NextSeo } from "next-seo";
+import Head from "next/head";
 
 import AuthorCard from "@components/blog/authorCard";
 import { Markup } from "interweave";
@@ -80,6 +81,9 @@ export default function Post({ data: { post }, currentUrl }) {
             url={seoData.url}
             canonical={seoData.url}
           />
+          <Head>
+            <link rel="preload" as="image" href={seoData.image} />
+          </Head>
           <Box sx={postStyle}>
             <Container className="!pt-0">
               <div className="max-w-screen-md mx-auto test">
@@ -139,28 +143,28 @@ export default function Post({ data: { post }, currentUrl }) {
             </div>
 
             <Container>
-              {/* <article className="max-w-screen-md mx-auto "> */}
-              <div
-                className="mx-auto my-3 prose prose-base dark:prose-invert prose-a:text-blue-500"
-                style={{ maxWidth: "unset" }}>
-                <Markup content={postData.postContent} />
-              </div>
-              <div className="flex justify-center mt-7 mb-7">
-                <Link href="/">
-                  <a className="px-5 py-2 text-sm text-blue-600 rounded-full dark:text-blue-500 bg-brand-secondary/20 ">
-                    ← View all posts
-                  </a>
-                </Link>
-              </div>
+              <article className="max-w-screen-md mx-auto ">
+                <div
+                  className="mx-auto my-3 prose prose-base dark:prose-invert prose-a:text-blue-500"
+                  style={{ maxWidth: "unset" }}>
+                  <Markup content={postData.postContent} />
+                </div>
+                <div className="flex justify-center mt-7 mb-7">
+                  <Link href="/">
+                    <a className="px-5 py-2 text-sm text-blue-600 rounded-full dark:text-blue-500 bg-brand-secondary/20 ">
+                      ← View all posts
+                    </a>
+                  </Link>
+                </div>
 
-              <AuthorCard
-                authorName={postData.postAuthorName}
-                authorImage={postData.postAuthorImage}
-                authorShortDescription={
-                  post.postAuthorShortDescription
-                }
-              />
-              {/* </article> */}
+                <AuthorCard
+                  authorName={postData.postAuthorName}
+                  authorImage={postData.postAuthorImage}
+                  authorShortDescription={
+                    post.postAuthorShortDescription
+                  }
+                />
+              </article>
             </Container>
           </Box>
         </>
