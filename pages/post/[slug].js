@@ -1,81 +1,40 @@
-import { useState, useEffect } from "react";
 import { Box, Grid } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import Layout from "@components/layout";
 import Container from "@components/container";
-import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
 
 import AuthorCard from "@components/blog/authorCard";
 import { Markup } from "interweave";
 
-import { useQuery, gql } from "@apollo/client";
+import { gql } from "@apollo/client";
 
 import postStyle from "css/post";
 import Lottie from "react-lottie";
 import animationData from "../../lottie/loading.json";
 import notFound from "../../lottie/notFound.json";
+import { client } from "pages/_app";
 
-export default function Post() {
-  const [postData, setPostData] = useState({});
+export default function Post({ data: { post } }) {
+  let postData;
 
-  const router = useRouter();
-
-  const { slug } = router.query;
-
-  const { data } = useQuery(
-    gql`
-      query {
-        post(where: { slug: "${slug}" }) {
-          author {
-            name
-            slug
-            image {
-              url
-            }
-            description {
-              html
-            }
-          }
-          content {
-            html
-          }
-          image {
-            url
-          }
-          slug
-          title
-          readingTime
-          publishedOn
-          tags {
-            name
-          }
-          excerpt {
-            text
-          }
-        }
-      }
-`
-  );
-
-  useEffect(() => {
-    if (data?.post) {
-      const { post } = data;
-      setPostData({
-        postTitle: post.title,
-        postReadingTime: post.readingTime,
-        postPublishedOn: post.publishedOn,
-        postImage: post.image.url,
-        postAuthorImage: post.author.image.url,
-        postContent: post.content.html,
-        postExcerpt: post.excerpt.text,
-        postAuthorName: post.author.name,
-        postAuthorShortDescription: post.author.description.html,
-        currentPostId: parseInt(router.query.slug)
-      });
-    }
-  }, [data, router.query.slug]);
+  if (post) {
+    postData = {
+      postTitle: post.title,
+      postReadingTime: post.readingTime,
+      postPublishedOn: post.publishedOn,
+      postImage: post.image.url,
+      postAuthorImage: post.author.image.url,
+      postContent: post.content.html,
+      postExcerpt: post.excerpt.text,
+      postAuthorName: post.author.name,
+      postAuthorShortDescription: post.author.description.html,
+      currentUrl:
+        "https://pranavgoswamiblogs.vercel.app/posts/" +
+        post.content.slug
+    };
+  }
 
   const defaultOptions = {
     loop: true,
@@ -87,7 +46,7 @@ export default function Post() {
 
   return (
     <Layout dataProps={postData}>
-      {data?.post === null ? (
+      {post === null ? (
         <Grid
           container
           height="50vh"
@@ -99,19 +58,23 @@ export default function Post() {
             />
           </Box>
         </Grid>
-      ) : data ? (
+      ) : post ? (
         <>
           <NextSeo
-            title={`${postData.postTitle} - Pranav Goswami Blogs`}
+            title={
+              postData.postTitle
+                ? postData.postTitle + " - Pranav Goswami Blog"
+                : "Pranav Goswami Blog"
+            }
             description={postData.postExcerpt}
             image={postData.postImage}
-            url={window.location.href}
-            canonical={window.location.href}
+            url={postData.currentUrl}
+            canonical={postData.currentUrl}
           />
           <Box sx={postStyle}>
             <Container className="!pt-0">
               <div className="max-w-screen-md mx-auto test">
-                <div className="text-center"></div>
+                {/* <div className="text-center"></div> */}
 
                 <h1 className="mt-2 mb-3 text-3xl font-semibold tracking-tight text-center lg:leading-snug text-brand-primary lg:text-4xl dark:text-white">
                   {postData.postTitle}
@@ -167,29 +130,28 @@ export default function Post() {
             </div>
 
             <Container>
-              <article className="max-w-screen-md mx-auto ">
-                <div
-                  className="mx-auto my-3 prose prose-base dark:prose-invert prose-a:text-blue-500"
-                  style={{ maxWidth: "unset" }}>
-                  <Markup content={postData.postContent} />
-                </div>
-                <div className="flex justify-center mt-7 mb-7">
-                  <Link href="/">
-                    <a className="px-5 py-2 text-sm text-blue-600 rounded-full dark:text-blue-500 bg-brand-secondary/20 ">
-                      ← View all posts
-                    </a>
-                  </Link>
-                </div>
-                {postData.postAuthorName && (
-                  <AuthorCard
-                    authorName={postData.postAuthorName}
-                    authorImage={postData.postAuthorImage}
-                    authorShortDescription={
-                      postData.postAuthorShortDescription
-                    }
-                  />
-                )}
-              </article>
+              {/* <article className="max-w-screen-md mx-auto "> */}
+              <div
+                className="mx-auto my-3 prose prose-base dark:prose-invert prose-a:text-blue-500"
+                style={{ maxWidth: "unset" }}>
+                <Markup content={postData.postContent} />
+              </div>
+              <div className="flex justify-center mt-7 mb-7">
+                <Link href="/">
+                  <a className="px-5 py-2 text-sm text-blue-600 rounded-full dark:text-blue-500 bg-brand-secondary/20 ">
+                    ← View all posts
+                  </a>
+                </Link>
+              </div>
+
+              <AuthorCard
+                authorName={postData.postAuthorName}
+                authorImage={postData.postAuthorImage}
+                authorShortDescription={
+                  post.postAuthorShortDescription
+                }
+              />
+              {/* </article> */}
             </Container>
           </Box>
         </>
@@ -211,4 +173,47 @@ export default function Post() {
       )}
     </Layout>
   );
+}
+
+export async function getServerSideProps({ req }) {
+  const slug = req.url.split("/")[2];
+
+  const dataQuery = gql`
+  query {
+    post(where: { slug: "${slug}" }) {
+      author {
+        name
+        slug
+        image {
+          url
+        }
+        description {
+          html
+        }
+      }
+      content {
+        html
+      }
+      image {
+        url
+      }
+      slug
+      title
+      readingTime
+      publishedOn
+      tags {
+        name
+      }
+      excerpt {
+        text
+      }
+    }
+  }
+`;
+
+  const { data } = await client.query({
+    query: dataQuery
+  });
+
+  return { props: { data } };
 }
